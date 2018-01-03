@@ -38,16 +38,31 @@
                     <ul class="nav navbar-nav">
                         &nbsp;
                     </ul>
-                    <ul class="nav navbar-nav">
 
-                    </ul>
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
                         @guest
-                            <li><a href="{{ route('login') }}">Login</a></li>
-                            <li><a href="{{ route('register') }}">Register</a></li>
+                            <li><a href="{{ route('login') }}">{{ __('messages.login') }}</a></li>
+                            <li><a href="{{ route('register') }}">{{ __('messages.register') }}</a></li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">
+                                    {{ LaravelLocalization::getCurrentLocale() }} <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                                        <li>
+                                            <a rel="alternate" hreflang="{{ $localeCode }}" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
+                                                {{ $localeCode }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </li>
+
                         @else
+                                <li><a href="{{ url('auctions') }}">{{ __('messages.auctions') }}</a></li>
+
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">
                                     {{ Auth::user()->name }} <span class="caret"></span>
@@ -55,10 +70,22 @@
 
                                 <ul class="dropdown-menu">
                                     <li>
+                                        <a href="{{url("messages")}}">{{ __('messages.message') }}</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{url("starredauctions")}}">{{ __('messages.starred') }}</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{route("myauctions")}}">{{ __('messages.mine') }}</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{url("auctions/create")}}">{{ __('messages.create') }}</a>
+                                    </li>
+                                    <li>
                                         <a href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
+                                           onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                            Logout
+                                            {{ __('messages.logout') }}
                                         </a>
 
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -67,20 +94,20 @@
                                     </li>
                                 </ul>
                             </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">
-                                {{ LaravelLocalization::getCurrentLocale() }} <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
-                                    <li class="dropdown">
-                                        <a rel="alternate" hreflang="{{ $localeCode }}" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
-                                            {{ $localeCode }}
-                                        </a>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">
+                                    {{ LaravelLocalization::getCurrentLocale() }} <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                                        <li>
+                                            <a rel="alternate" hreflang="{{ $localeCode }}" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
+                                                {{ $localeCode }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </li>
                         @endguest
                     </ul>
                 </div>
