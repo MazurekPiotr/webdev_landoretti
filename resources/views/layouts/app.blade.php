@@ -28,7 +28,7 @@
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
+                    <a class="navbar-brand" href="">
                         {{ config('app.name', 'Laravel') }}
                     </a>
                 </div>
@@ -45,6 +45,7 @@
                         @guest
                             <li><a href="{{ route('login') }}">{{ __('messages.login') }}</a></li>
                             <li><a href="{{ route('register') }}">{{ __('messages.register') }}</a></li>
+                            <li><a href="auctions">{{ __('messages.auctions') }}</a></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">
                                     {{ LaravelLocalization::getCurrentLocale() }} <span class="caret"></span>
@@ -61,23 +62,21 @@
                             </li>
 
                         @else
-                                <li><a href="{{ url('auctions') }}">{{ __('messages.auctions') }}</a></li>
 
+                            <li><a href="auctions">{{ __('messages.auctions') }}</a></li>
+                            <li>
+                                <a href="myauctions">{{ __('messages.mine') }}</a>
+                            </li>
+                            <li>
+                                <a href="mywatchlist">watchlist</a>
+                            </li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 
                                 <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="{{url("messages")}}">{{ __('messages.message') }}</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{url("starredauctions")}}">{{ __('messages.starred') }}</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{route("myauctions")}}">{{ __('messages.mine') }}</a>
-                                    </li>
+
                                     <li>
                                         <a href="{{url("auctions/create")}}">{{ __('messages.create') }}</a>
                                     </li>

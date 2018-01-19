@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Article;
+use App\Watchlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Bidding;
@@ -20,7 +21,7 @@ class ArticlesController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth', ['except' => ['index','show']]);
     }
 
     public function index()
@@ -36,9 +37,16 @@ class ArticlesController extends Controller
      */
     public function create()
     {
-        return view("createauction");
+        return view("create_article");
     }
 
+    public function myAuctions()
+    {
+        $id = Auth::user()->id;
+        $articles = Article::where('user_id', $id)->get();
+
+        return view("myauctions")->with('articles', $articles);
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -110,7 +118,7 @@ class ArticlesController extends Controller
             'user_id' => Auth::id()
         ])->first();
 
-        return view("edit_article")->with('auction',$article);
+        return view("edit_article")->with('article',$article);
     }
 
     public function update(Request $request, $id)
@@ -197,5 +205,42 @@ class ArticlesController extends Controller
         $bidding->save();
 
         return redirect('auctions/'.$bidding->article_id);
+    }
+
+    public function editBidding(Request $request)
+    {
+        $this->validate($request, [
+            'price'       => 'required'
+        ]);
+        $bidding = Bidding::find($request->input('bid_id'));
+        $bidding->price = $request->input('price');
+        $bidding->save();
+
+        return redirect('auctions/'.$bidding->article_id);
+    }
+
+    public function showEditBidding($id)
+    {
+      $bidding = Bidding::find($id);
+
+      return view('editbidding')->with('bidding', $bidding);
+    }
+    public function showWatchlist()
+    {
+        $articles = Watchlist::where('id', Auth::id())->get();
+
+        return view('watchlist')->with('articles', $articles);
+    }
+
+    public function addToWatchlist($id)
+    {
+        $article = Article::where('id', $id)->first();
+        $user = Auth::id();
+        $watchlist = new Watchlist();
+        $watchlist->user_id = $user;
+        $watchlist->article_id = $id;
+        $watchlist->save();
+
+        return redirect('auctions/'.$id);
     }
 }

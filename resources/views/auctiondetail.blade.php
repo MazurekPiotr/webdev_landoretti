@@ -18,7 +18,8 @@
             <p><strong>Buyoutprice:</strong> {{$article->buyout_price}}</p>
             <p><strong>Enddate:</strong> {{$article->enddate}}</p>
             <a href="../auctionbidding/{{$article->id}}" class="btn btn-primary">Bid!</a>
-            <a href="../auctionbuynow/{{$article->id}}" class="btn btn-primary">BUY NOW!</a>
+            <a href="../buynow/{{$article->id}}" class="btn btn-primary">BUY NOW!</a>
+            <a href="../addtowatchlist/{{$article->id}}" class="btn btn-primary">Add to watchlist</a>
         </div>
     </div>
     <div class="container comments">
@@ -28,20 +29,20 @@
                     <h2>Biddings:</h2>
                 </div>
                 <div class="comments-list">
-                    @if(count($article->getBiddings($article->id))==0)
+                    @if(count($article->biddings())==0)
                         <p>There are no biddings yet.</p>
                     @endif
-                    @foreach($article->getBiddings($article->id) as $key => $value)
+                    @foreach($article->biddings()->get() as $key => $value)
                     <div class="media">
                             <h4 class="media-heading user_name"><strong>{{$value->name}}</strong></h4>
                             € {{$value->price}}
+                            @if(Auth::id() == $value->user_id)
+                                <a href="/editBidding/{{$value->id}}">Edit bid</a>
+                            @endif
                         </div>
                     </div>
                 @endforeach
                 </div>
-
-
-
             </div>
         </div>
 @endsection

@@ -1,11 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
+    {{ Breadcrumbs::render('auctions') }}
     @if(count($articles)==0)
         <p>There are no auctions here!.</p>
     @endif
     <div class="row">
         @foreach($articles as $key => $value)
+            @if($value->status == 'active')
             <?php
             $end = \Carbon\Carbon::parse($value->enddate);
             $now = \Carbon\Carbon::today();
@@ -17,6 +19,7 @@
                     <p><strong>Days to go: </strong>{{ \Carbon\Carbon::parse($value->enddate)->diffInDays(\Carbon\Carbon::now()) }}</p><br>
                     <a href="./auctions/{{$value->id}}" class="btn btn-primary">More information!</a>
                 </div>
+            @endif
         @endforeach
     </div>
     <div class="container text-center">
